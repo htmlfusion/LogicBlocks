@@ -52,8 +52,15 @@ public partial class CursorManager : Singleton<CursorManager>
             CursorOnHolograms.SetActive(false);
         }
 
-        // Place the cursor at the calculated position.
-        this.gameObject.transform.position = GazeManager.Instance.Position + GazeManager.Instance.Normal * DistanceFromCollision;
+        if (GazeManager.Instance.Hit && GazeManager.Instance.HitInfo.collider.name.StartsWith("Block_"))
+        {
+            this.gameObject.transform.position = GazeManager.Instance.HitInfo.collider.bounds.center + GazeManager.Instance.HitInfo.normal * DistanceFromCollision;
+        } else
+        {
+            // Place the cursor at the calculated position.
+            this.gameObject.transform.position = GazeManager.Instance.Position + GazeManager.Instance.Normal * DistanceFromCollision;
+        }
+
 
         // Orient the cursor to match the surface being gazed at.
         gameObject.transform.up = GazeManager.Instance.Normal;

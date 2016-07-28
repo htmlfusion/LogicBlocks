@@ -135,7 +135,6 @@ namespace HoloToolkit.Unity
                     }
 
                     Mesh mesh = filter.sharedMesh;
-
                     if (mesh != null && !mesh.bounds.Intersects(bounds))
                     {
                         // We don't need to do anything to this mesh, move to the next one.

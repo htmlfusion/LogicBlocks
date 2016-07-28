@@ -20,6 +20,11 @@ namespace HoloToolkit.Unity
         public KeyCode EditorSelectKey = KeyCode.Space;
 
         /// <summary>
+        /// GameObject to delegate click events to. This is useful if you are gazing at the SpatialMap
+        /// </summary>
+        public GameObject DelegateObject;
+
+        /// <summary>
         /// To select even when a hologram is not being gazed at,
         /// set the override focused object.
         /// If its null, then the gazed at object will be selected.
@@ -56,7 +61,15 @@ namespace HoloToolkit.Unity
         {
             if (focusedObject != null)
             {
-                focusedObject.SendMessage("OnSelect");
+                GameObject delegateObject;
+                if (DelegateObject)
+                {
+                    delegateObject = DelegateObject;
+                } else
+                {
+                    delegateObject = focusedObject;
+                }
+                delegateObject.SendMessage("OnSelect");
             }
         }
 
