@@ -5,11 +5,14 @@ using System.Collections.Generic;
 public class LogicBlockController : MonoBehaviour {
 
 	enum Behaviors {Trigger, Output};
+    Dictionary<string, Behaviors> sideBehaviors = new Dictionary<string, Behaviors>();
+    public enum BlockTypes { Start, End, Operator };
+    public BlockTypes BlockType = BlockTypes.Operator;
+    public float pullRadius = 2;
+    public float pullForce = 1;
 
-	Dictionary<string, Behaviors> sideBehaviors = new Dictionary<string, Behaviors>();
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		sideBehaviors.Add ("Front", Behaviors.Output);
 		sideBehaviors.Add ("Top", Behaviors.Trigger);
 		sideBehaviors.Add ("Bottom", Behaviors.Output);
@@ -30,7 +33,23 @@ public class LogicBlockController : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision collision) {
+    public void FixedUpdate()
+    {
+        foreach (Collider collider in Physics.OverlapSphere(transform.position, pullRadius)) {
+
+            if (collider.gameObject.name == "Ball")
+            {
+                // calculate direction from target to me
+                Vector3 forceDirection = transform.position - collider.transform.position;
+
+                // apply force on target towards me
+                collider.attachedRigidbody.AddForce(forceDirection.normalized * pullForce * Time.fixedDeltaTime);
+            }
+        }
+    }
+
+
+    void OnCollisionEnter(Collision collision) {
 		print ("Collision");
 		// TODO Ensure that it isn't colliding with it's source panel;
 		// ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
@@ -68,4 +87,5 @@ public class LogicBlockController : MonoBehaviour {
 		ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
 //		ball.transform.Translate (ballRigidBody.velocity);
 	}
+
 }
