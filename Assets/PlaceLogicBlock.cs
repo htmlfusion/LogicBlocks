@@ -64,6 +64,7 @@ namespace HoloToolkit.Unity
             } else
             {
                 startBlock = CreateAndPlace();
+                startBlock.tag = "StartBlock";
                 startBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.Start;
             }
         }
@@ -77,6 +78,7 @@ namespace HoloToolkit.Unity
             else
             {
                 endBlock = CreateAndPlace();
+                endBlock.tag = "EndBlock";
                 endBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.End;
             }
         }

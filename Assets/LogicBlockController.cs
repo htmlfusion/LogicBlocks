@@ -35,31 +35,47 @@ public class LogicBlockController : MonoBehaviour {
 
     public void FixedUpdate()
     {
-        foreach (Collider collider in Physics.OverlapSphere(transform.position, pullRadius)) {
-
-            if (collider.gameObject.name == "Ball")
+        if (BlockType == BlockTypes.End)
+        {
+            foreach (Collider collider in Physics.OverlapSphere(transform.position, pullRadius))
             {
-                // calculate direction from target to me
-                Vector3 forceDirection = transform.position - collider.transform.position;
 
-                // apply force on target towards me
-                collider.attachedRigidbody.AddForce(forceDirection.normalized * pullForce * Time.fixedDeltaTime);
+                if (collider.gameObject.name == "Ball")
+                {
+                    // calculate direction from target to me
+                    Vector3 forceDirection = transform.position - collider.transform.position;
+
+                    // apply force on target towards me
+                    collider.attachedRigidbody.AddForce(forceDirection.normalized * pullForce * Time.fixedDeltaTime);
+                }
             }
         }
     }
 
 
     void OnCollisionEnter(Collision collision) {
-		print ("Collision");
 		// TODO Ensure that it isn't colliding with it's source panel;
 		// ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
+        if (BlockType == BlockTypes.End)
+        {
+            Destroy(collision.gameObject);
+            if (BallCount() == 1)
+            {
+                GameObject startBlock = GameObject.FindGameObjectWithTag("StartBlock");
+                startBlock.GetComponent<LogicBlockController>().ShootBall("Front");
+            }
+        }
 
 	}
+
+    int BallCount()
+    {
+       return GameObject.FindGameObjectsWithTag("Ball").Length;
+    }
 
 	public void SideClicked (GameObject side) {
 		
 		// If this side is a button, we'll shoot a ball from all outputs on the box
-		print(side.name);
 		if (!sideBehaviors.ContainsKey (side.name)) {
 			return;
 		}
@@ -68,16 +84,17 @@ public class LogicBlockController : MonoBehaviour {
 			foreach (KeyValuePair<string, Behaviors> pair in sideBehaviors) {
 				if (pair.Value == Behaviors.Output) {
 					// Shoot ball
-					Transform outputSide = transform.Find(pair.Key);
-					ShootBall (outputSide);
+					ShootBall (pair.Key);
 				}
 			}
 		}
 
 	}
 
-	private void ShootBall(Transform side) {
-		GameObject ball = (GameObject)Instantiate(Resources.Load("LogicSphere")); ;
+	private void ShootBall(string sideName) {
+        print("shooting ball");
+        Transform side = transform.Find(sideName);
+        GameObject ball = (GameObject)Instantiate(Resources.Load("Ball")); ;
 		ball.transform.localScale = new Vector3 (4, 4, 4);
 		MeshFilter plane = side.GetComponent<MeshFilter> ();
 		plane.mesh.RecalculateNormals ();
