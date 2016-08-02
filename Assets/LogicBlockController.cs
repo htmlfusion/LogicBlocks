@@ -40,7 +40,7 @@ public class LogicBlockController : MonoBehaviour {
             foreach (Collider collider in Physics.OverlapSphere(transform.position, pullRadius))
             {
 
-                if (collider.gameObject.name == "Ball")
+                if (collider.gameObject.name.StartsWith("Ball"))
                 {
                     // calculate direction from target to me
                     Vector3 forceDirection = transform.position - collider.transform.position;
@@ -93,15 +93,14 @@ public class LogicBlockController : MonoBehaviour {
 
 	private void ShootBall(string sideName) {
         print("shooting ball");
-        Transform side = transform.Find(sideName);
-        GameObject ball = (GameObject)Instantiate(Resources.Load("Ball")); ;
-		ball.transform.localScale = new Vector3 (4, 4, 4);
+        Transform side = transform.Find("Block_" + sideName);
+        GameObject ball = (GameObject) Instantiate(Resources.Load("Ball")); ;
 		MeshFilter plane = side.GetComponent<MeshFilter> ();
 		plane.mesh.RecalculateNormals ();
 		Rigidbody rigidbody = ball.GetComponent<Rigidbody> ();
 		rigidbody.velocity = (side.localToWorldMatrix * plane.mesh.normals [0]) * 10;
 		ball.transform.position = side.position;
-		ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
+		//ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
 //		ball.transform.Translate (ballRigidBody.velocity);
 	}
 
