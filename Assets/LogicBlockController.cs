@@ -8,8 +8,10 @@ public class LogicBlockController : MonoBehaviour {
     Dictionary<string, Behaviors> sideBehaviors = new Dictionary<string, Behaviors>();
     public enum BlockTypes { Start, End, Operator };
     public BlockTypes BlockType = BlockTypes.Operator;
-    public float pullRadius = 2;
-    public float pullForce = 1;
+    public float pullRadius = 4000;
+
+    [Tooltip("Pull force of out block.")]
+    public float pullForce = 5;
 
     // Use this for initialization
     void Start () {
@@ -68,7 +70,7 @@ public class LogicBlockController : MonoBehaviour {
 
 	}
 
-    int BallCount()
+    public int BallCount()
     {
        return GameObject.FindGameObjectsWithTag("Ball").Length;
     }
@@ -91,7 +93,7 @@ public class LogicBlockController : MonoBehaviour {
 
 	}
 
-	private void ShootBall(string sideName) {
+	public void ShootBall(string sideName) {
         print("shooting ball");
         Transform side = transform.Find("Block_" + sideName);
         GameObject ball = (GameObject) Instantiate(Resources.Load("Ball")); ;
@@ -99,7 +101,7 @@ public class LogicBlockController : MonoBehaviour {
 		plane.mesh.RecalculateNormals ();
 		Rigidbody rigidbody = ball.GetComponent<Rigidbody> ();
 		rigidbody.velocity = (side.localToWorldMatrix * plane.mesh.normals [0]) * 10;
-		ball.transform.position = side.position;
+		ball.transform.position = side.position + rigidbody.velocity;
 		//ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
 //		ball.transform.Translate (ballRigidBody.velocity);
 	}

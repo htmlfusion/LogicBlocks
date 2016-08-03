@@ -56,6 +56,15 @@ namespace HoloToolkit.Unity
             }
         }
 
+        void KickOff()
+        {
+            LogicBlockController controller = startBlock.GetComponent<LogicBlockController>();
+            if (startBlock && endBlock && controller.BallCount() == 0)
+            {
+                controller.ShootBall("Front");
+            }
+        }
+
         public void SetStartBlock()
         {
             if (startBlock)
@@ -67,6 +76,7 @@ namespace HoloToolkit.Unity
                 startBlock.tag = "StartBlock";
                 startBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.Start;
             }
+            KickOff();
         }
 
         public void SetEndBlock()
@@ -81,6 +91,7 @@ namespace HoloToolkit.Unity
                 endBlock.tag = "EndBlock";
                 endBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.End;
             }
+            KickOff();
         }
 
     }
