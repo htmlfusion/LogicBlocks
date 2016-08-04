@@ -37,26 +37,8 @@ namespace HoloToolkit.Unity
             Bounds blockBounds = block.GetComponent<BoxCollider>().bounds;
             block.transform.position = new Vector3(hit.x, hit.y, hit.z);
             block.transform.position = block.transform.position + GazeManager.Instance.HitInfo.normal * blockBounds.size.x / 2;
+            block.transform.up = GazeManager.Instance.HitInfo.normal;
             return block;
-        }
-
-        void OnCollisionEnter(Collider other)
-        {
-            print("collision");
-            Vector3 direction = other.transform.position - transform.position;
-            if (Vector3.Dot(transform.forward, direction) > 0)
-            {
-                print("Back");
-            }
-            if (Vector3.Dot(transform.forward, direction) < 0)
-            {
-                print("Front");
-            }
-            if (Vector3.Dot(transform.forward, direction) == 0)
-            {
-                print("Side");
-            }
-
         }
 
         GameObject CreateAndPlace()
@@ -79,7 +61,7 @@ namespace HoloToolkit.Unity
             LogicBlockController controller = startBlock.GetComponent<LogicBlockController>();
             if (startBlock && endBlock && controller.BallCount() == 0)
             {
-                controller.ShootBall("Front");
+                controller.ShootBall("Top");
             }
         }
 

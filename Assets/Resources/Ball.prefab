@@ -23,6 +23,8 @@ GameObject:
   - 135: {fileID: 135000010179182218}
   - 23: {fileID: 23000010081373630}
   - 54: {fileID: 54000012610190154}
+  - 114: {fileID: 114000010706463320}
+  - 96: {fileID: 96000011095398356}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Ball
@@ -37,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012260362640}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14022, y: 0.0356, z: 0.9211}
+  m_LocalPosition: {x: -7.3, y: 0, z: 0}
   m_LocalScale: {x: 0.07137787, y: 0.07137787, z: 0.07137787}
   m_Children: []
   m_Father: {fileID: 0}
@@ -52,10 +54,11 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 5ffa443db8f362840b64702686ad297d, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
@@ -64,6 +67,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -92,6 +96,68 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!96 &96000011095398356
+TrailRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012260362640}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Time: 1.16
+  m_StartWidth: 0.03
+  m_EndWidth: 0.001
+  m_Colors:
+    m_Color[0]:
+      serializedVersion: 2
+      rgba: 4291743438
+    m_Color[1]:
+      serializedVersion: 2
+      rgba: 2160576455
+    m_Color[2]:
+      serializedVersion: 2
+      rgba: 2816203739
+    m_Color[3]:
+      serializedVersion: 2
+      rgba: 2412497867
+    m_Color[4]:
+      serializedVersion: 2
+      rgba: 2478356664
+  m_MinVertexDistance: 0.001
+  m_Autodestruct: 0
+--- !u!114 &114000010706463320
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012260362640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fcb5e636a4fd634c8de4f21453ed74b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyAfter: 15
 --- !u!135 &135000010179182218
 SphereCollider:
   m_ObjectHideFlags: 1

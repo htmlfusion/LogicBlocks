@@ -11,7 +11,7 @@ public class LogicBlockController : MonoBehaviour {
     public float pullRadius = 4000;
 
     [Tooltip("Pull force of out block.")]
-    public float pullForce = 5;
+    public float pullForce = 100;
 
     // Use this for initialization
     void Start () {
@@ -56,19 +56,28 @@ public class LogicBlockController : MonoBehaviour {
 
 
     void OnCollisionEnter(Collision collision) {
-		// TODO Ensure that it isn't colliding with it's source panel;
-		// ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
+
+        print("collision");
+        Vector3 direction = collision.transform.position - transform.position;
+        if (Vector3.Dot(transform.forward, direction) > 0)
+        {
+            print("Back");
+        }
+        if (Vector3.Dot(transform.forward, direction) < 0)
+        {
+            print("Front");
+        }
+        if (Vector3.Dot(transform.forward, direction) == 0)
+        {
+            print("Side");
+        }
+
         if (BlockType == BlockTypes.End)
         {
             Destroy(collision.gameObject);
-            if (BallCount() == 1)
-            {
-                GameObject startBlock = GameObject.FindGameObjectWithTag("StartBlock");
-                startBlock.GetComponent<LogicBlockController>().ShootBall("Front");
-            }
         }
 
-	}
+    }
 
     public int BallCount()
     {
@@ -90,20 +99,55 @@ public class LogicBlockController : MonoBehaviour {
 				}
 			}
 		}
-
 	}
 
-	public void ShootBall(string sideName) {
-        print("shooting ball");
-        Transform side = transform.Find("Block_" + sideName);
+    public Vector3 sideNormal(string sideName)
+    {
+        float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
+        Vector3 pos;
+        switch (sideName)
+        {
+            case "Bottom":
+                pos =  -transform.up;
+                break;
+            case "Top":
+                pos = transform.up;
+                break;
+            case "Left":
+                pos = - transform.right;
+                break;
+            case "Right":
+                pos = transform.right;
+                break;
+            case "Back":
+                pos = - transform.forward;
+                break;
+            case "Front":
+                pos = transform.forward;
+                break;
+            default:
+                pos = transform.forward;
+                break;
+        }
+        return transform.localToWorldMatrix * pos;
+    }
+
+
+
+    public Vector3 sidePosition(string sideName)
+    {
+        float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
+        return transform.position + sideNormal(sideName) * cubeSize / 2;
+    }
+
+	public void ShootBall(string sideName)
+    {
         GameObject ball = (GameObject) Instantiate(Resources.Load("Ball")); ;
-		MeshFilter plane = side.GetComponent<MeshFilter> ();
-		plane.mesh.RecalculateNormals ();
 		Rigidbody rigidbody = ball.GetComponent<Rigidbody> ();
-		rigidbody.velocity = (side.localToWorldMatrix * plane.mesh.normals [0]) * 10;
-		ball.transform.position = side.position + rigidbody.velocity;
-		//ball.GetComponent<LogicBall> ().SourcePanel = this.gameObject;
-//		ball.transform.Translate (ballRigidBody.velocity);
+        Vector3 pos = sidePosition(sideName);
+        Vector3 normal = sideNormal(sideName);
+        rigidbody.velocity = normal;
+		ball.transform.position = pos + rigidbody.velocity;
 	}
 
 }
