@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace HoloToolkit.Unity
 {
@@ -21,7 +20,7 @@ namespace HoloToolkit.Unity
         {
             if (startBlock && endBlock)
             {
-
+                KickOff();
             }
         }
 
@@ -39,6 +38,25 @@ namespace HoloToolkit.Unity
             block.transform.position = new Vector3(hit.x, hit.y, hit.z);
             block.transform.position = block.transform.position + GazeManager.Instance.HitInfo.normal * blockBounds.size.x / 2;
             return block;
+        }
+
+        void OnCollisionEnter(Collider other)
+        {
+            print("collision");
+            Vector3 direction = other.transform.position - transform.position;
+            if (Vector3.Dot(transform.forward, direction) > 0)
+            {
+                print("Back");
+            }
+            if (Vector3.Dot(transform.forward, direction) < 0)
+            {
+                print("Front");
+            }
+            if (Vector3.Dot(transform.forward, direction) == 0)
+            {
+                print("Side");
+            }
+
         }
 
         GameObject CreateAndPlace()
@@ -76,7 +94,6 @@ namespace HoloToolkit.Unity
                 startBlock.tag = "StartBlock";
                 startBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.Start;
             }
-            KickOff();
         }
 
         public void SetEndBlock()
@@ -91,7 +108,6 @@ namespace HoloToolkit.Unity
                 endBlock.tag = "EndBlock";
                 endBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.End;
             }
-            KickOff();
         }
 
     }
