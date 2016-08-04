@@ -13,6 +13,7 @@ GameObject:
   - 23: {fileID: 2367842}
   - 114: {fileID: 11401466}
   - 54: {fileID: 5411340}
+  - 114: {fileID: 114000012534440948}
   m_Layer: 0
   m_Name: LogicSphere
   m_TagString: Untagged
@@ -42,6 +43,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
@@ -54,6 +56,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -116,3 +119,15 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 102358}
   m_IsPrefabParent: 1
+--- !u!114 &114000012534440948
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 102358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fcb5e636a4fd634c8de4f21453ed74b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyAfter: 5
