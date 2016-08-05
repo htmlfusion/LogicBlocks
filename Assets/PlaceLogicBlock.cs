@@ -92,5 +92,19 @@ namespace HoloToolkit.Unity
             }
         }
 
+        public void FlipSide()
+        {
+            GameObject focused = GazeManager.Instance.FocusedObject;
+            if (focused.name.StartsWith("LogicBlock"))
+            {
+                Vector3 hitNormal = GazeManager.Instance.HitInfo.normal;
+                string sideName = focused.GetComponent<LogicBlockController>().NormalToSide(hitNormal);
+                if (sideName != null)
+                {
+                    focused.GetComponent<LogicBlockController>().FlipSide(sideName);
+                }
+            }
+        }
+
     }
 }

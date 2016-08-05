@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class LogicBlockController : MonoBehaviour {
 
-	enum Behaviors {Trigger, Output};
+    enum Behaviors { Trigger, Output };
+    public string[] sides = new string[6]{"Front", "Back", "Top", "Bottom", "Left", "Right"};
     Dictionary<string, Behaviors> sideBehaviors = new Dictionary<string, Behaviors>();
     public enum BlockTypes { Start, End, Operator };
     public BlockTypes BlockType = BlockTypes.Operator;
@@ -15,9 +17,10 @@ public class LogicBlockController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		sideBehaviors.Add ("Front", Behaviors.Output);
-		sideBehaviors.Add ("Top", Behaviors.Trigger);
-		sideBehaviors.Add ("Bottom", Behaviors.Output);
+        for (int i=0; i<sides.Length; i++)
+        {
+            sideBehaviors.Add(sides[i], Behaviors.Output);
+        }
 	}
 	
 	// Update is called once per frame
@@ -101,6 +104,25 @@ public class LogicBlockController : MonoBehaviour {
 		}
 	}
 
+    public void FlipSide(string sideName)
+    {
+        GameObject visualPort = transform.Find(sideName + "_Cylinder").gameObject;
+        string materialName;
+        if (sideBehaviors[sideName] == Behaviors.Output)
+        {
+            sideBehaviors[sideName] = Behaviors.Trigger;
+            materialName = "InBallMaterial";
+        }
+        else
+        {
+            sideBehaviors[sideName] = Behaviors.Output;
+            materialName = "OutBallMaterial";
+        }
+
+        Material portMaterial = Resources.Load("Materials/"+materialName, typeof(Material)) as Material;
+        visualPort.GetComponent<Renderer>().material = portMaterial;
+    }
+
     public Vector3 sideNormal(string sideName)
     {
         float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
@@ -129,10 +151,21 @@ public class LogicBlockController : MonoBehaviour {
                 pos = transform.forward;
                 break;
         }
-        return transform.localToWorldMatrix * pos;
+        return (transform.localToWorldMatrix * pos).normalized;
     }
 
-
+    public string NormalToSide(Vector3 hitNormal)
+    {
+        for (int i=0; i<sides.Length; i++)
+        {
+            Vector3 side = sideNormal(sides[i]);
+            if (hitNormal == side)
+            {
+                return sides[i];
+            }
+        }
+        return null;
+    }
 
     public Vector3 sidePosition(string sideName)
     {
