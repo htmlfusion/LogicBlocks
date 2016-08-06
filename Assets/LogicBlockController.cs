@@ -5,7 +5,7 @@ using System;
 
 public class LogicBlockController : MonoBehaviour {
 
-    enum Behaviors { Trigger, Output };
+    public enum Behaviors { Trigger, Output };
     public string[] sides = new string[6]{"Front", "Back", "Top", "Bottom", "Left", "Right"};
     Dictionary<string, Behaviors> sideBehaviors = new Dictionary<string, Behaviors>();
     public enum BlockTypes { Start, End, Operator };
@@ -19,7 +19,7 @@ public class LogicBlockController : MonoBehaviour {
     void Start () {
         for (int i=0; i<sides.Length; i++)
         {
-            sideBehaviors.Add(sides[i], Behaviors.Output);
+            sideBehaviors[sides[i]] = Behaviors.Output;
         }
 	}
 	
@@ -106,21 +106,32 @@ public class LogicBlockController : MonoBehaviour {
 
     public void FlipSide(string sideName)
     {
-        GameObject visualPort = transform.Find(sideName + "_Cylinder").gameObject;
-        string materialName;
         if (sideBehaviors[sideName] == Behaviors.Output)
         {
-            sideBehaviors[sideName] = Behaviors.Trigger;
-            materialName = "InBallMaterial";
+            SetSideBehavior(sideName, Behaviors.Trigger);
         }
         else
         {
-            sideBehaviors[sideName] = Behaviors.Output;
-            materialName = "OutBallMaterial";
+            SetSideBehavior(sideName, Behaviors.Output);
         }
 
-        Material portMaterial = Resources.Load("Materials/"+materialName, typeof(Material)) as Material;
+    }
+
+    public void SetSideBehavior(string sideName, Behaviors behavior)
+    {
+        string materialName;
+        if (behavior == Behaviors.Output)
+        {
+            materialName = "OutBallMaterial";
+        }
+        else
+        {
+            materialName = "InBallMaterial";
+        }
+        GameObject visualPort = transform.Find(sideName + "_Cylinder").gameObject;
+        Material portMaterial = Resources.Load("Materials/" + materialName, typeof(Material)) as Material;
         visualPort.GetComponent<Renderer>().material = portMaterial;
+        sideBehaviors[sideName] = behavior;
     }
 
     public Vector3 sideNormal(string sideName)
@@ -151,7 +162,7 @@ public class LogicBlockController : MonoBehaviour {
                 pos = transform.forward;
                 break;
         }
-        return (transform.localToWorldMatrix * pos).normalized;
+        return pos;
     }
 
     public string NormalToSide(Vector3 hitNormal)
@@ -169,8 +180,10 @@ public class LogicBlockController : MonoBehaviour {
 
     public Vector3 sidePosition(string sideName)
     {
-        float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
-        return transform.position + sideNormal(sideName) * cubeSize / 2;
+        float cubeSize = transform.localScale.x;
+        Vector3 sideDir =  sideNormal(sideName);
+        Vector3 offset = sideDir * cubeSize / 2;
+        return transform.position + offset;
     }
 
 	public void ShootBall(string sideName)
@@ -180,7 +193,7 @@ public class LogicBlockController : MonoBehaviour {
         Vector3 pos = sidePosition(sideName);
         Vector3 normal = sideNormal(sideName);
         rigidbody.velocity = normal;
-		ball.transform.position = pos + rigidbody.velocity;
+		ball.transform.position = pos;
 	}
 
 }
