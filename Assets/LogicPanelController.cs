@@ -19,10 +19,5 @@ public class LogicPanelController : MonoBehaviour {
 //		}
 //
 //	}
-
-	void OnTriggerEnter(Collider other) {
-		transform.parent.GetComponent <LogicBlockController>().SideClicked (other.gameObject);
-	}
-
 		
 }

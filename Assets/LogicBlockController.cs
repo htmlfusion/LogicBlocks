@@ -25,17 +25,6 @@ public class LogicBlockController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0)) {
-			GameObject _this = gameObject;
-
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if (Physics.Raycast (ray, out hit)) {
-				if (hit.transform == _this.transform) {
-					SideClicked (hit.collider.gameObject);
-				}
-			}
-		}
 	}
 
     public void FixedUpdate()
@@ -60,24 +49,47 @@ public class LogicBlockController : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision) {
 
-        print("collision");
-        Vector3 direction = collision.transform.position - transform.position;
-        if (Vector3.Dot(transform.forward, direction) > 0)
-        {
-            print("Back");
-        }
-        if (Vector3.Dot(transform.forward, direction) < 0)
-        {
-            print("Front");
-        }
-        if (Vector3.Dot(transform.forward, direction) == 0)
-        {
-            print("Side");
-        }
+
 
         if (BlockType == BlockTypes.End)
         {
             Destroy(collision.gameObject);
+        } else
+        {
+            Vector3 direction = collision.transform.position - transform.position;
+            string sideName;
+            if (Vector3.Dot(transform.forward, direction) > 0)
+            {
+                print("Back");
+                sideName = "Back";
+            }
+            else if (Vector3.Dot(transform.forward, direction) < 0)
+            {
+                print("Front");
+                sideName = "Front";
+            }
+            else if (Vector3.Dot(transform.right, direction) > 0)
+            {
+                print("Right");
+                sideName = "Right";
+            }
+            else if (Vector3.Dot(transform.right, direction) < 0)
+            {
+                print("Left");
+                sideName = "Left";
+            }
+            else if (Vector3.Dot(transform.up, direction) > 0)
+            {
+                print("Right");
+                sideName = "Top";
+            }
+            else
+            {
+                print("Left");
+                sideName = "Bottom";
+            }
+
+            SideClicked(sideName);
         }
 
     }
@@ -87,14 +99,14 @@ public class LogicBlockController : MonoBehaviour {
        return GameObject.FindGameObjectsWithTag("Ball").Length;
     }
 
-	public void SideClicked (GameObject side) {
+	public void SideClicked (string sideName) {
 		
 		// If this side is a button, we'll shoot a ball from all outputs on the box
-		if (!sideBehaviors.ContainsKey (side.name)) {
+		if (!sideBehaviors.ContainsKey (sideName)) {
 			return;
 		}
 
-		if (sideBehaviors [side.name] == Behaviors.Trigger) {
+		if (sideBehaviors [sideName] == Behaviors.Trigger) {
 			foreach (KeyValuePair<string, Behaviors> pair in sideBehaviors) {
 				if (pair.Value == Behaviors.Output) {
 					// Shoot ball
@@ -193,7 +205,7 @@ public class LogicBlockController : MonoBehaviour {
         Vector3 pos = sidePosition(sideName);
         Vector3 normal = sideNormal(sideName);
         rigidbody.velocity = normal;
-		ball.transform.position = pos;
+		ball.transform.position = pos + normal * transform.localScale.x;
 	}
 
 }
