@@ -9,13 +9,22 @@ public class LogicBlockController : MonoBehaviour {
     public enum BlockTypes { Start, End, Operator };
     public BlockTypes BlockType = BlockTypes.Operator;
     public float pullRadius = 4000;
+    public Renderer rend;
 
     [Tooltip("Pull force of out block.")]
     public float pullForce = 100;
 
     // Use this for initialization
     void Start () {
-		sideBehaviors.Add ("Front", Behaviors.Output);
+        rend = GetComponent<Renderer>();
+        if (this.tag == "StartBlock")
+        {
+            rend.material.color = Color.green;
+        }
+        else if (this.tag == "EndBlock") {
+            rend.material.color = Color.red;
+        }
+        sideBehaviors.Add ("Front", Behaviors.Output);
 		sideBehaviors.Add ("Top", Behaviors.Trigger);
 		sideBehaviors.Add ("Bottom", Behaviors.Output);
 	}
