@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System;
 
 public class LogicBlockController : MonoBehaviour {
 
@@ -48,50 +46,10 @@ public class LogicBlockController : MonoBehaviour {
 
 
     void OnCollisionEnter(Collision collision) {
-
-
-
         if (BlockType == BlockTypes.End)
         {
             Destroy(collision.gameObject);
-        } else
-        {
-            Vector3 direction = collision.transform.position - transform.position;
-            string sideName;
-            if (Vector3.Dot(transform.forward, direction) > 0)
-            {
-                print("Back");
-                sideName = "Back";
-            }
-            else if (Vector3.Dot(transform.forward, direction) < 0)
-            {
-                print("Front");
-                sideName = "Front";
-            }
-            else if (Vector3.Dot(transform.right, direction) > 0)
-            {
-                print("Right");
-                sideName = "Right";
-            }
-            else if (Vector3.Dot(transform.right, direction) < 0)
-            {
-                print("Left");
-                sideName = "Left";
-            }
-            else if (Vector3.Dot(transform.up, direction) > 0)
-            {
-                print("Right");
-                sideName = "Top";
-            }
-            else
-            {
-                print("Left");
-                sideName = "Bottom";
-            }
-
-            SideClicked(sideName);
         }
-
     }
 
     public int BallCount()
@@ -174,7 +132,7 @@ public class LogicBlockController : MonoBehaviour {
                 pos = transform.forward;
                 break;
         }
-        return pos;
+        return (transform.localToWorldMatrix * pos).normalized;
     }
 
     public string NormalToSide(Vector3 hitNormal)

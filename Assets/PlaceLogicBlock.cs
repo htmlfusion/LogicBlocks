@@ -103,7 +103,7 @@ namespace HoloToolkit.Unity
             GameObject focused = GazeManager.Instance.FocusedObject;
             if (focused.name.StartsWith("LogicBlock"))
             {
-                Vector3 hitNormal = GazeManager.Instance.HitInfo.normal;
+                Vector3 hitNormal = GazeManager.Instance.HitInfo.normal.normalized;
                 string sideName = focused.GetComponent<LogicBlockController>().NormalToSide(hitNormal);
                 if (sideName != null)
                 {
