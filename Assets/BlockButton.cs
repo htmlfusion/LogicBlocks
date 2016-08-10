@@ -15,8 +15,22 @@ public class BlockButton : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        string sideName = gameObject.name.Replace("_Cylinder", "");
-        transform.parent.GetComponent<LogicBlockController>().SideClicked(sideName);
+        LogicBlockController controller = transform.parent.GetComponent<LogicBlockController>();
+        if (controller.BlockType != LogicBlockController.BlockTypes.End &&
+            controller.BlockType != LogicBlockController.BlockTypes.Start)
+        {
+            GameObject sourceBlock = GetComponent<BallController>().block;
+            GameObject parentBlock = transform.parent.gameObject;
+            if (sourceBlock != parentBlock)
+            {
+                string sideName = gameObject.name.Replace("_Cylinder", "");
+                bool fired = controller.SideClicked(sideName);
+                if (fired)
+                {
+                    Destroy(collision.gameObject);
+                }
+            }
+        }
     }
 
 }

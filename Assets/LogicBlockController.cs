@@ -17,9 +17,9 @@ public class LogicBlockController : MonoBehaviour {
     void Start () {
         for (int i=0; i<sides.Length; i++)
         {
-            sideBehaviors[sides[i]] = Behaviors.Output;
+            SetSideBehavior(sides[i], Behaviors.Trigger);
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -54,14 +54,17 @@ public class LogicBlockController : MonoBehaviour {
 
     public int BallCount()
     {
-       return GameObject.FindGameObjectsWithTag("Ball").Length;
+        GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
+        print("Balls " + balls.Length);
+        return balls.Length;
     }
 
-	public void SideClicked (string sideName) {
-		
+	public bool SideClicked (string sideName) {
+
+        bool fired = false;
 		// If this side is a button, we'll shoot a ball from all outputs on the box
 		if (!sideBehaviors.ContainsKey (sideName)) {
-			return;
+			return fired;
 		}
 
 		if (sideBehaviors [sideName] == Behaviors.Trigger) {
@@ -69,9 +72,11 @@ public class LogicBlockController : MonoBehaviour {
 				if (pair.Value == Behaviors.Output) {
 					// Shoot ball
 					ShootBall (pair.Key);
+                    fired = true;
 				}
 			}
 		}
+        return fired;
 	}
 
     public void FlipSide(string sideName)
@@ -158,7 +163,8 @@ public class LogicBlockController : MonoBehaviour {
 
 	public void ShootBall(string sideName)
     {
-        GameObject ball = (GameObject) Instantiate(Resources.Load("Ball")); ;
+        GameObject ball = (GameObject) Instantiate(Resources.Load("Ball"));
+        ball.GetComponent<BallController>().block = this.gameObject;
 		Rigidbody rigidbody = ball.GetComponent<Rigidbody> ();
         Vector3 pos = sidePosition(sideName);
         Vector3 normal = sideNormal(sideName);

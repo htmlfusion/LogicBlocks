@@ -23,7 +23,7 @@ GameObject:
   - 23: {fileID: 23000014175515786}
   - 114: {fileID: 114000010409230294}
   - 65: {fileID: 65000012487214072}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Front_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - 23: {fileID: 23000013097637794}
   - 114: {fileID: 114000010381525882}
   - 65: {fileID: 65000010212393968}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Right_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - 23: {fileID: 23000010276124448}
   - 114: {fileID: 114000011246525362}
   - 65: {fileID: 65000010789095016}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Left_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   - 23: {fileID: 23000013810106000}
   - 114: {fileID: 114000014233270434}
   - 65: {fileID: 65000010947351486}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Back_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - 23: {fileID: 23000012073713460}
   - 114: {fileID: 114000011057997982}
   - 65: {fileID: 65000012024723524}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Top_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - 23: {fileID: 23000010918202192}
   - 114: {fileID: 114000012043329732}
   - 65: {fileID: 65000011788125012}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Bottom_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
