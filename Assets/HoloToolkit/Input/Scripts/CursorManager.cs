@@ -22,13 +22,6 @@ public partial class CursorManager : Singleton<CursorManager>
     [Tooltip("Distance, in meters, to offset the cursor from the collision point.")]
     public float DistanceFromCollision = 0.01f;
 
-    /*
-     * GameObject BlockPreview;
-     * GameObject block;
-     * Bounds blockBounds;
-     * bool blockpre = false;
-    */
-
     void Awake()
     {
         if (CursorOnHolograms == null || CursorOffHolograms == null)
@@ -39,31 +32,6 @@ public partial class CursorManager : Singleton<CursorManager>
         // Hide the Cursors to begin with.
         CursorOnHolograms.SetActive(false);
         CursorOffHolograms.SetActive(false);
-    }
-
-    void Start()
-    {
-        /*
-         * BlockPreview = Resources.Load<GameObject>("BlockPreview");
-        block = GameObject.Instantiate(BlockPreview) as GameObject;
-        block.SetActive(false);
-        */
-    }
-
-    void Update() {
-        // cursor preview block
-        /* 
-         * if (HandsManager.Instance.HandDetected || blockpre)
-        {
-            block.transform.position = this.gameObject.transform.position;
-            PlaceLogicBlock.Instance.PlaceBlock(block);
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            blockpre = !blockpre;
-            block.SetActive(blockpre);
-        } 
-        */
     }
 
     void LateUpdate()

@@ -78,11 +78,6 @@ namespace HoloToolkit.Unity
             OnTap();
         }
 
-        void Update()
-        {
-
-        }
-
         void LateUpdate()
         {
             GameObject oldFocusedObject = focusedObject;

@@ -10,7 +10,7 @@ namespace HoloToolkit.Unity
         public float DistanceFromCollision = 0.01f;
         GameObject BlockPreview;
         GameObject block;
-        Bounds blockBounds;
+        Vector3 blockBounds;
 
         // Use this for initialization
         void Start()
@@ -27,26 +27,31 @@ namespace HoloToolkit.Unity
         {
             if (HandsManager.Instance.HandDetected)
             {
-                block.SetActive(true);
-            }
-            else
-            {
-                block.SetActive(false);
-            }
-
-            if (GazeManager.Instance.Hit && GazeManager.Instance.HitInfo.collider.name.StartsWith("LogicBlock"))
-            {
+                Quaternion rotate;
                 block.SetActive(true);
                 Vector3 hit = CursorManager.Instance.gameObject.transform.position;
-                blockBounds = GazeManager.Instance.HitInfo.collider.GetComponent<BoxCollider>().bounds;
-                block.transform.position = GazeManager.Instance.HitInfo.collider.bounds.center;
-                block.transform.position = block.transform.position + GazeManager.Instance.HitInfo.normal * blockBounds.size.x;
-                //block.transform.up = GazeManager.Instance.HitInfo.normal;
+                blockBounds = block.transform.localScale;
+                block.transform.position = new Vector3(hit.x, hit.y, hit.z);
+                block.transform.position = block.transform.position + GazeManager.Instance.HitInfo.normal * blockBounds.x / 2;
+                block.transform.up = GazeManager.Instance.HitInfo.normal;
+                
+                if (GazeManager.Instance.HitInfo.collider.name.StartsWith("LogicBlock"))
+                {
+                    rotate = Quaternion.LookRotation(GazeManager.Instance.HitInfo.transform.forward, GazeManager.Instance.HitInfo.transform.up);
+                }
+                else
+                {
+                    rotate = Quaternion.LookRotation(-Camera.main.transform.forward, Camera.main.transform.up);
+                    rotate.x = CursorManager.Instance.gameObject.transform.rotation.x;
+                    rotate.z = CursorManager.Instance.gameObject.transform.rotation.z;
+                }
+
+                block.transform.rotation = rotate;
             }
             else
-            {
-                block.SetActive(false);
-            }
+             {
+                 block.SetActive(false);
+             }
         }
 
 

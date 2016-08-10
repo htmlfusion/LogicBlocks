@@ -33,26 +33,30 @@ namespace HoloToolkit.Unity
 
         public GameObject PlaceBlock(GameObject block)
         {
-            Quaternion rotate;
-            Vector3 hit = CursorManager.Instance.gameObject.transform.position;
-            Bounds blockBounds = block.GetComponent<BoxCollider>().bounds;
-            block.transform.position = new Vector3(hit.x, hit.y, hit.z);
-            block.transform.position = block.transform.position + GazeManager.Instance.HitInfo.normal * blockBounds.size.x / 2;
-            block.transform.up = GazeManager.Instance.HitInfo.normal;
-            
-            if(!GazeManager.Instance.HitInfo.collider.name.StartsWith("LogicBlock"))
-            {
-                rotate = Quaternion.LookRotation(-Camera.main.transform.forward, Camera.main.transform.up);
-                rotate.x = block.transform.rotation.x;
-                rotate.z = block.transform.rotation.z;
-            }
-            else
-            {
-                rotate = Quaternion.Euler(0, GazeManager.Instance.HitInfo.collider.transform.eulerAngles.y, 0);
-            }
-            block.transform.rotation = rotate;
+                 
+                 Vector3 hit = CursorManager.Instance.gameObject.transform.position;
+                 Bounds blockBounds = block.GetComponent<BoxCollider>().bounds;
+                 block.transform.position = new Vector3(hit.x, hit.y, hit.z);
+                 block.transform.position = block.transform.position + GazeManager.Instance.HitInfo.normal * blockBounds.size.x / 2;
+                 block.transform.up = GazeManager.Instance.HitInfo.normal;
 
-            return block;
+                 if(!GazeManager.Instance.HitInfo.collider.name.StartsWith("LogicBlock"))
+                 {
+                     Quaternion rotate;
+                     rotate = Quaternion.LookRotation(-Camera.main.transform.forward, Camera.main.transform.up);
+                     rotate.x = block.transform.rotation.x;
+                     rotate.z = block.transform.rotation.z;
+                     block.transform.rotation = rotate;
+                 }
+                 else
+                 {
+                     Vector3 rotate;
+                     rotate = GazeManager.Instance.HitInfo.transform.eulerAngles;
+                     block.transform.rotation = Quaternion.Euler(rotate);
+                 }
+                 
+                 
+                 return block;
         }
 
         GameObject CreateAndPlace()
