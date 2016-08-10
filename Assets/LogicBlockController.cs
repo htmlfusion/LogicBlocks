@@ -71,9 +71,12 @@ public class LogicBlockController : MonoBehaviour {
 			foreach (KeyValuePair<string, Behaviors> pair in sideBehaviors) {
 				if (pair.Value == Behaviors.Output) {
 					// Shoot ball
-					ShootBall (pair.Key);
-                    fired = true;
-				}
+                    // If any of the balls were successfully shot, then we set fired to true
+					if(ShootBall (pair.Key))
+                    {
+                        fired = true;
+                    }
+                }
 			}
 		}
         return fired;
@@ -109,6 +112,37 @@ public class LogicBlockController : MonoBehaviour {
         sideBehaviors[sideName] = behavior;
     }
 
+    public float Width()
+    {
+        float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
+        return cubeSize;
+    }
+
+    public float sideClearence(string sideName)
+    {
+        Vector3 normal = sideNormal(sideName);
+        Vector3 position = sidePosition(sideName);
+        RaycastHit[] hits = Physics.RaycastAll(position, normal);
+        if (hits.Length > 0)
+        {
+            float shortest = Mathf.Infinity;
+            for (int i=0; i<hits.Length; i++)
+            {
+                RaycastHit hit = hits[i];
+                if (hit.distance < shortest)
+                {
+                    shortest = hit.distance;
+                }
+            }
+            return shortest;
+        }
+        else
+        {
+            return Mathf.Infinity;
+        }
+    
+    }
+
     public Vector3 sideNormal(string sideName)
     {
         float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
@@ -137,7 +171,7 @@ public class LogicBlockController : MonoBehaviour {
                 pos = transform.forward;
                 break;
         }
-        return (transform.localToWorldMatrix * pos).normalized;
+        return pos;
     }
 
     public string NormalToSide(Vector3 hitNormal)
@@ -161,15 +195,24 @@ public class LogicBlockController : MonoBehaviour {
         return transform.position + offset;
     }
 
-	public void ShootBall(string sideName)
+	public bool ShootBall(string sideName)
     {
-        GameObject ball = (GameObject) Instantiate(Resources.Load("Ball"));
-        ball.GetComponent<BallController>().block = this.gameObject;
-		Rigidbody rigidbody = ball.GetComponent<Rigidbody> ();
-        Vector3 pos = sidePosition(sideName);
-        Vector3 normal = sideNormal(sideName);
-        rigidbody.velocity = normal;
-		ball.transform.position = pos + normal * transform.localScale.x;
-	}
+        float clearence = sideClearence(sideName);
+
+        // If the face is too close to another object then don't shoot the ball
+        if (clearence > Width() * 2)
+        {
+            GameObject ball = (GameObject)Instantiate(Resources.Load("Ball"));
+            Rigidbody rigidbody = ball.GetComponent<Rigidbody>();
+            Vector3 pos = sidePosition(sideName);
+            Vector3 normal = sideNormal(sideName);
+            rigidbody.velocity = normal;
+            ball.transform.position = pos + normal * transform.localScale.x;
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
 }

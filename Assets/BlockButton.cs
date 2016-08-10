@@ -19,16 +19,11 @@ public class BlockButton : MonoBehaviour {
         if (controller.BlockType != LogicBlockController.BlockTypes.End &&
             controller.BlockType != LogicBlockController.BlockTypes.Start)
         {
-            GameObject sourceBlock = GetComponent<BallController>().block;
-            GameObject parentBlock = transform.parent.gameObject;
-            if (sourceBlock != parentBlock)
+            string sideName = gameObject.name.Replace("_Cylinder", "");
+            bool fired = controller.SideClicked(sideName);
+            if (fired)
             {
-                string sideName = gameObject.name.Replace("_Cylinder", "");
-                bool fired = controller.SideClicked(sideName);
-                if (fired)
-                {
-                    Destroy(collision.gameObject);
-                }
+                Destroy(collision.gameObject);
             }
         }
     }

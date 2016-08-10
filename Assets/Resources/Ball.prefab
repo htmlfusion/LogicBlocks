@@ -25,7 +25,6 @@ GameObject:
   - 114: {fileID: 114000010706463320}
   - 96: {fileID: 96000011095398356}
   - 135: {fileID: 135000010362085162}
-  - 114: {fileID: 114000012881085238}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Ball
@@ -55,7 +54,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_MotionVectors: 1
+  m_MotionVectors: 0
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
@@ -158,19 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcb5e636a4fd634c8de4f21453ed74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyAfter: 15
---- !u!114 &114000012881085238
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000012260362640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d657f22c2eca4c4ca89f9aaba4836d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  block: {fileID: 0}
+  destroyAfter: 15000
+  destroyBefore: 300
 --- !u!135 &135000010362085162
 SphereCollider:
   m_ObjectHideFlags: 1
