@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class LogicBlockController : MonoBehaviour {
 
-	enum Behaviors {Trigger, Output};
+    public enum Behaviors { Trigger, Output };
+    public string[] sides = new string[6]{"Front", "Back", "Top", "Bottom", "Left", "Right"};
     Dictionary<string, Behaviors> sideBehaviors = new Dictionary<string, Behaviors>();
     public enum BlockTypes { Start, End, Operator };
     public BlockTypes BlockType = BlockTypes.Operator;
@@ -21,27 +21,18 @@ public class LogicBlockController : MonoBehaviour {
         {
             rend.material.color = Color.green;
         }
-        else if (this.tag == "EndBlock") {
+        else if (this.tag == "EndBlock")
+        {
             rend.material.color = Color.red;
         }
-        sideBehaviors.Add ("Front", Behaviors.Output);
-		sideBehaviors.Add ("Top", Behaviors.Trigger);
-		sideBehaviors.Add ("Bottom", Behaviors.Output);
-	}
+        for (int i=0; i<sides.Length; i++)
+        {
+            SetSideBehavior(sides[i], Behaviors.Trigger);
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0)) {
-			GameObject _this = gameObject;
-
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if (Physics.Raycast (ray, out hit)) {
-				if (hit.transform == _this.transform) {
-					SideClicked (hit.collider.gameObject);
-				}
-			}
-		}
 	}
 
     public void FixedUpdate()
@@ -65,50 +56,102 @@ public class LogicBlockController : MonoBehaviour {
 
 
     void OnCollisionEnter(Collision collision) {
-
-        print("collision");
-        Vector3 direction = collision.transform.position - transform.position;
-        if (Vector3.Dot(transform.forward, direction) > 0)
-        {
-            print("Back");
-        }
-        if (Vector3.Dot(transform.forward, direction) < 0)
-        {
-            print("Front");
-        }
-        if (Vector3.Dot(transform.forward, direction) == 0)
-        {
-            print("Side");
-        }
-
         if (BlockType == BlockTypes.End)
         {
             Destroy(collision.gameObject);
         }
-
     }
 
     public int BallCount()
     {
-       return GameObject.FindGameObjectsWithTag("Ball").Length;
+        GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
+        print("Balls " + balls.Length);
+        return balls.Length;
     }
 
-	public void SideClicked (GameObject side) {
-		
+	public bool SideClicked (string sideName) {
+
+        bool fired = false;
 		// If this side is a button, we'll shoot a ball from all outputs on the box
-		if (!sideBehaviors.ContainsKey (side.name)) {
-			return;
+		if (!sideBehaviors.ContainsKey (sideName)) {
+			return fired;
 		}
 
-		if (sideBehaviors [side.name] == Behaviors.Trigger) {
+		if (sideBehaviors [sideName] == Behaviors.Trigger) {
 			foreach (KeyValuePair<string, Behaviors> pair in sideBehaviors) {
 				if (pair.Value == Behaviors.Output) {
 					// Shoot ball
-					ShootBall (pair.Key);
-				}
+                    // If any of the balls were successfully shot, then we set fired to true
+					if(ShootBall (pair.Key))
+                    {
+                        fired = true;
+                    }
+                }
 			}
 		}
+        return fired;
 	}
+
+    public void FlipSide(string sideName)
+    {
+        if (sideBehaviors[sideName] == Behaviors.Output)
+        {
+            SetSideBehavior(sideName, Behaviors.Trigger);
+        }
+        else
+        {
+            SetSideBehavior(sideName, Behaviors.Output);
+        }
+
+    }
+
+    public void SetSideBehavior(string sideName, Behaviors behavior)
+    {
+        string materialName;
+        if (behavior == Behaviors.Output)
+        {
+            materialName = "OutBallMaterial";
+        }
+        else
+        {
+            materialName = "InBallMaterial";
+        }
+        GameObject visualPort = transform.Find(sideName + "_Cylinder").gameObject;
+        Material portMaterial = Resources.Load("Materials/" + materialName, typeof(Material)) as Material;
+        visualPort.GetComponent<Renderer>().material = portMaterial;
+        sideBehaviors[sideName] = behavior;
+    }
+
+    public float Width()
+    {
+        float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
+        return cubeSize;
+    }
+
+    public float sideClearence(string sideName)
+    {
+        Vector3 normal = sideNormal(sideName);
+        Vector3 position = sidePosition(sideName);
+        RaycastHit[] hits = Physics.RaycastAll(position, normal);
+        if (hits.Length > 0)
+        {
+            float shortest = Mathf.Infinity;
+            for (int i=0; i<hits.Length; i++)
+            {
+                RaycastHit hit = hits[i];
+                if (hit.distance < shortest)
+                {
+                    shortest = hit.distance;
+                }
+            }
+            return shortest;
+        }
+        else
+        {
+            return Mathf.Infinity;
+        }
+    
+    }
 
     public Vector3 sideNormal(string sideName)
     {
@@ -138,25 +181,48 @@ public class LogicBlockController : MonoBehaviour {
                 pos = transform.forward;
                 break;
         }
-        return transform.localToWorldMatrix * pos;
+        return pos;
     }
 
-
+    public string NormalToSide(Vector3 hitNormal)
+    {
+        for (int i=0; i<sides.Length; i++)
+        {
+            Vector3 side = sideNormal(sides[i]);
+            if (hitNormal == side)
+            {
+                return sides[i];
+            }
+        }
+        return null;
+    }
 
     public Vector3 sidePosition(string sideName)
     {
-        float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
-        return transform.position + sideNormal(sideName) * cubeSize / 2;
+        float cubeSize = transform.localScale.x;
+        Vector3 sideDir =  sideNormal(sideName);
+        Vector3 offset = sideDir * cubeSize / 2;
+        return transform.position + offset;
     }
 
-	public void ShootBall(string sideName)
+	public bool ShootBall(string sideName)
     {
-        GameObject ball = (GameObject) Instantiate(Resources.Load("Ball")); ;
-		Rigidbody rigidbody = ball.GetComponent<Rigidbody> ();
-        Vector3 pos = sidePosition(sideName);
-        Vector3 normal = sideNormal(sideName);
-        rigidbody.velocity = normal;
-		ball.transform.position = pos + rigidbody.velocity;
-	}
+        float clearence = sideClearence(sideName);
+
+        // If the face is too close to another object then don't shoot the ball
+        if (clearence > Width() * 2)
+        {
+            GameObject ball = (GameObject)Instantiate(Resources.Load("Ball"));
+            Rigidbody rigidbody = ball.GetComponent<Rigidbody>();
+            Vector3 pos = sidePosition(sideName);
+            Vector3 normal = sideNormal(sideName);
+            rigidbody.velocity = normal;
+            ball.transform.position = pos + normal * transform.localScale.x;
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
 }

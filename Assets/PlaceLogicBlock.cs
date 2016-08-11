@@ -79,7 +79,7 @@ namespace HoloToolkit.Unity
             LogicBlockController controller = startBlock.GetComponent<LogicBlockController>();
             if (startBlock && endBlock && controller.BallCount() == 0)
             {
-                controller.ShootBall("Top");
+                controller.ShootBall("Front");
             }
         }
 
@@ -92,7 +92,8 @@ namespace HoloToolkit.Unity
             {
                 startBlock = CreateAndPlace();
                 startBlock.tag = "StartBlock";
-                startBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.Start;
+                LogicBlockController controller = startBlock.GetComponent<LogicBlockController>();
+                controller.BlockType = LogicBlockController.BlockTypes.Start;
             }
         }
 
@@ -106,7 +107,26 @@ namespace HoloToolkit.Unity
             {
                 endBlock = CreateAndPlace();
                 endBlock.tag = "EndBlock";
-                endBlock.GetComponent<LogicBlockController>().BlockType = LogicBlockController.BlockTypes.End;
+                LogicBlockController controller = endBlock.GetComponent<LogicBlockController>();
+                controller.BlockType = LogicBlockController.BlockTypes.End;
+                controller.SetSideBehavior("Front", LogicBlockController.Behaviors.Trigger);
+                controller.SetSideBehavior("Left", LogicBlockController.Behaviors.Trigger);
+                controller.SetSideBehavior("Right", LogicBlockController.Behaviors.Trigger);
+                controller.SetSideBehavior("Back", LogicBlockController.Behaviors.Trigger);
+            }
+        }
+
+        public void FlipSide()
+        {
+            GameObject focused = GazeManager.Instance.FocusedObject;
+            if (focused.name.StartsWith("LogicBlock"))
+            {
+                Vector3 hitNormal = GazeManager.Instance.HitInfo.normal.normalized;
+                string sideName = focused.GetComponent<LogicBlockController>().NormalToSide(hitNormal);
+                if (sideName != null)
+                {
+                    focused.GetComponent<LogicBlockController>().FlipSide(sideName);
+                }
             }
         }
 
