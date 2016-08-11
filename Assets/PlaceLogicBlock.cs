@@ -130,5 +130,13 @@ namespace HoloToolkit.Unity
             }
         }
 
+        public void DeleteBlock()
+        {
+            if(GazeManager.Instance.HitInfo.collider.name.StartsWith("LogicBlock"))
+            {
+                Destroy(GazeManager.Instance.HitInfo.collider.gameObject);
+            }
+        }
+
     }
 }
