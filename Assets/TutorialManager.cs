@@ -34,15 +34,15 @@ public class TutorialManager : MonoBehaviour {
 
     IEnumerator StartTutorial() {
         // Initial wait for tutorial to start
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         // Play beginning of tutorial
         audio.PlayOneShot(startTutorialClip);
-        yield return new WaitForSeconds(startTutorialClip.length + 2);
+        yield return new WaitForSeconds(startTutorialClip.length + 3);
 
         // Play second part of tutorial
         audio.PlayOneShot(startBlockTutorialClip);
-        yield return new WaitForSeconds(startBlockTutorialClip.length + 2);
+        yield return new WaitForSeconds(startBlockTutorialClip.length + 3);
 
         // Play third part of tutorial
         //Invoke("startBlockTutorial", startTutorialSound.length);
@@ -76,10 +76,10 @@ public class TutorialManager : MonoBehaviour {
 
     IEnumerator startEndBlockFinished()
     {
+        audio.PlayOneShot(startEndBlockFinishClip);
+        yield return new WaitForSeconds(startEndBlockFinishClip.length + 1);
         audio.PlayOneShot(logicBlockTutorialClip);
         yield return new WaitForSeconds(logicBlockTutorialClip.length);
-        audio.PlayOneShot(startEndBlockFinishClip);
-        yield return new WaitForSeconds(startEndBlockFinishClip.length);
     }
 
     void PlacedLogicBlock()
