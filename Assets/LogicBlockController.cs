@@ -20,14 +20,27 @@ public class LogicBlockController : MonoBehaviour {
         if (this.tag == "StartBlock")
         {
             rend.material.color = Color.green;
+            TogglePorts(false);
         }
         else if (this.tag == "EndBlock")
         {
             rend.material.color = Color.red;
+            TogglePorts(false);
         }
         for (int i=0; i<sides.Length; i++)
         {
             SetSideBehavior(sides[i], Behaviors.Trigger);
+        }
+    }
+
+    void TogglePorts(bool active)
+    {
+        foreach (Transform child in transform) 
+        {
+            if (child.gameObject.name.EndsWith("_Cylinder"))
+            {
+                child.gameObject.SetActive(active);
+            }
         }
     }
 	
