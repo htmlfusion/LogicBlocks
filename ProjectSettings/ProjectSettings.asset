@@ -4,12 +4,13 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 8
+  productGUID: 26c1555f0a58f4521b94bba269598fa6
   AndroidProfiler: 0
   defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: HTML Fusion
   productName: LogicBlocks
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -101,7 +102,6 @@ PlayerSettings:
   xboxOneDisableKinectGpuReservation: 0
   singlePassStereoRendering: 0
   protectGraphicsMemory: 0
-  productGUID: 26c1555f0a58f4521b94bba269598fa6
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 9
   AndroidPreferredInstallLocation: 1
@@ -290,6 +290,7 @@ PlayerSettings:
   ps4attribMoveSupport: 0
   ps4attrib3DSupport: 0
   ps4attribShareSupport: 0
+  ps4attribExclusiveVR: 0
   ps4disableAutoHideSplash: 0
   ps4IncludedModules: []
   monoEnv: 
@@ -353,7 +354,7 @@ PlayerSettings:
   metroCertificateNotAfter: 00f48379720dd301
   metroApplicationDescription: LogicBlocks
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: LogicBlocks
   metroCommandLineArgsFile: 
   metroTileShowName: 0
   metroMediumTileShowName: 0

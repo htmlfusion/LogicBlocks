@@ -124,7 +124,7 @@ public class LogicBlockController : MonoBehaviour {
 
     public float Width()
     {
-        float cubeSize = GetComponent<MeshRenderer>().bounds.max.x;
+        float cubeSize = (transform.localToWorldMatrix * GetComponent<BoxCollider>().bounds.max).x;
         return cubeSize;
     }
 
@@ -208,9 +208,12 @@ public class LogicBlockController : MonoBehaviour {
 	public bool ShootBall(string sideName)
     {
         float clearence = sideClearence(sideName);
+        float width = Width();
+        print(clearence);
+        print(width);
 
         // If the face is too close to another object then don't shoot the ball
-        if (clearence > Width() * 2)
+        if (clearence > width )
         {
             GameObject ball = (GameObject)Instantiate(Resources.Load("Ball"));
             Rigidbody rigidbody = ball.GetComponent<Rigidbody>();
