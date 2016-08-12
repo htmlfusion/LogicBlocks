@@ -85,6 +85,7 @@ namespace HoloToolkit.Unity
 
         public void SetStartBlock()
         {
+            SendMessage("PlacedStartBlock");
             if (startBlock)
             {
                 PlaceBlock(startBlock);
@@ -99,6 +100,7 @@ namespace HoloToolkit.Unity
 
         public void SetEndBlock()
         {
+            SendMessage("PlacedEndBlock");
             if (endBlock)
             {
                 PlaceBlock(endBlock);
