@@ -6,35 +6,26 @@ public class Autodestruct : MonoBehaviour {
 
     int createdAt;
 
-    public int destroyAfter = 5000;
-
-    public int destroyBefore = 500;
+    public int destroyAfter = 10;
 
     // Use this for initialization
     void Start () {
         TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-        createdAt = (int)t.TotalMilliseconds;
+        createdAt = (int)t.TotalSeconds;
     }
 
     int lifeSpan()
     {
         TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
-        int now = (int)t.TotalMilliseconds;
+        int now = (int)t.TotalSeconds;
         return now - createdAt;
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        int alive = lifeSpan();
-        if (alive > 0 && alive < destroyBefore) {
-            Destroy(gameObject);
-        }
     }
 
     // Update is called once per frame
     void Update ()
     {
-        if ((lifeSpan()) > destroyAfter)
+        int alive = lifeSpan();
+        if (alive > destroyAfter)
         {
             Destroy(gameObject);
         }

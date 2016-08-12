@@ -219,7 +219,7 @@ public class LogicBlockController : MonoBehaviour {
             Rigidbody rigidbody = ball.GetComponent<Rigidbody>();
             Vector3 pos = sidePosition(sideName);
             Vector3 normal = sideNormal(sideName);
-            rigidbody.velocity = normal;
+            rigidbody.velocity = normal * 3;
             ball.transform.position = pos + normal * transform.localScale.x;
             return true;
         } else

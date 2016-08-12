@@ -233,8 +233,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fcb5e636a4fd634c8de4f21453ed74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyAfter: 15000
-  destroyBefore: 300
+  destroyAfter: 5
 --- !u!114 &114000011652617084
 MonoBehaviour:
   m_ObjectHideFlags: 1
