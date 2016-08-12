@@ -3,9 +3,9 @@ using System.Collections;
 
 public class TutorialManager : MonoBehaviour {
     public AudioClip startTutorialSound;
-    public AudioClip startBlockTutorial;
-    public AudioClip endBlockTutorial;
-    public AudioClip logicBlockTutorial;
+    public AudioClip startBlockTutorialSound;
+    public AudioClip endBlockTutorialSound;
+    public AudioClip logicBlockTutorialSound;
     private new AudioSource audio;
     private bool placedStartBlock = false;
     private bool placedEndBlock = false;
@@ -13,7 +13,9 @@ public class TutorialManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
        audio = GetComponent<AudioSource>();
-       Invoke("StartTutorial", 5);
+       //Invoke("StartTutorial", 5);
+
+        StartCoroutine(StartTutorial());
 	}
 	
 	// Update is called once per frame
@@ -21,20 +23,26 @@ public class TutorialManager : MonoBehaviour {
 	
 	}
 
-    void StartTutorial() {
-        Debug.Log("second llog");
+    IEnumerator StartTutorial() {
+        yield return new WaitForSeconds(5);
         audio.PlayOneShot(startTutorialSound);
-
-
-
+        yield return new WaitForSeconds(startTutorialSound.length + 5);
+        audio.PlayOneShot(startBlockTutorialSound);
+        yield return new WaitForSeconds(startBlockTutorialSound.length + 5);
+        //Invoke("startBlockTutorial", startTutorialSound.length);
     }
+
+   /* void startBlockTutorial()
+    {
+        audio.PlayOneShot(startBlockTutorialSound);
+    }*/
 
     void PlacedStartBlock()
     {
         if(placedStartBlock == false)
         {
             /* Play End Block tutorial */
-            audio.PlayOneShot(startBlockTutorial);
+            audio.PlayOneShot(endBlockTutorialSound);
 
 
             placedStartBlock = true;
@@ -46,7 +54,7 @@ public class TutorialManager : MonoBehaviour {
         if (placedEndBlock == false)
         {
             /* Play Logic Block tutorial */
-            audio.PlayOneShot(logicBlockTutorial);
+            audio.PlayOneShot(logicBlockTutorialSound);
 
             Debug.Log("Placed the end block");
             placedEndBlock = true;
