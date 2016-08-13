@@ -12,6 +12,7 @@ public class TutorialManager : MonoBehaviour {
     public AudioClip finishedTutorialClip;
 
     private new AudioSource audio;
+    private GameObject tutorialAsset;
 
     // Boolean markers to check instruction status
     private bool placedStartBlock = false;
@@ -21,8 +22,8 @@ public class TutorialManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-       audio = GetComponent<AudioSource>();
-       //Invoke("StartTutorial", 5);
+        tutorialAsset = GameObject.Find("tutorial_animation");
+        audio = GetComponent<AudioSource>();
 
         StartCoroutine(StartTutorial());
 	}
@@ -36,17 +37,15 @@ public class TutorialManager : MonoBehaviour {
         // Initial wait for tutorial to start
         yield return new WaitForSeconds(3);
 
-        // Play beginning of tutorial
+        // Play beginning of tutorial and wait until it finishes
         audio.PlayOneShot(startTutorialClip);
         yield return new WaitForSeconds(startTutorialClip.length + 3);
 
-        // Play second part of tutorial
-        audio.PlayOneShot(startBlockTutorialClip);
-        yield return new WaitForSeconds(startBlockTutorialClip.length + 3);
+        // Turn off tutorial asset
+        tutorialAsset.SetActive(false);
 
-        // Play third part of tutorial
-        //Invoke("startBlockTutorial", startTutorialSound.length);
-        //yield return new WaitForSeconds(startBlockTutorialClip.length + 3);
+        // Play instructions
+        audio.PlayOneShot(startBlockTutorialClip);
     }
 
     void PlacedStartBlock()
@@ -69,15 +68,16 @@ public class TutorialManager : MonoBehaviour {
             /* Play Logic Block tutorial */
             StartCoroutine(startEndBlockFinished());
             
-            //audio.PlayOneShot(logicBlockTutorialClip);
-            
         }   
     }
 
     IEnumerator startEndBlockFinished()
     {
+        // Play clip for finishing start/end block placing
         audio.PlayOneShot(startEndBlockFinishClip);
         yield return new WaitForSeconds(startEndBlockFinishClip.length + 1);
+
+        // Play clip for logic block placing
         audio.PlayOneShot(logicBlockTutorialClip);
         yield return new WaitForSeconds(logicBlockTutorialClip.length);
     }
