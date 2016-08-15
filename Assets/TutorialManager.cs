@@ -42,7 +42,7 @@ public class TutorialManager : MonoBehaviour {
         yield return new WaitForSeconds(startTutorialClip.length + 3);
 
         // Turn off tutorial asset
-        tutorialAsset.SetActive(false);
+        // tutorialAsset.SetActive(false);
 
         // Play instructions
         audio.PlayOneShot(startBlockTutorialClip);

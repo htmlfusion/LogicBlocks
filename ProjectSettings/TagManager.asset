@@ -6,6 +6,8 @@ TagManager:
   tags:
   - StartBlock
   - EndBlock
+  - StartMenu
+  - TutorialMenu
   layers:
   - Default
   - TransparentFX

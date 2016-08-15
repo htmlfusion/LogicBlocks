@@ -34,19 +34,23 @@ namespace HoloToolkit.Unity
                 block.transform.position = new Vector3(hit.x, hit.y, hit.z);
                 block.transform.position = block.transform.position + GazeManager.Instance.HitInfo.normal * blockBounds.x / 2;
                 block.transform.up = GazeManager.Instance.HitInfo.normal;
-                
-                if (GazeManager.Instance.HitInfo.collider.name.StartsWith("LogicBlock"))
-                {
-                    rotate = Quaternion.LookRotation(GazeManager.Instance.HitInfo.transform.forward, GazeManager.Instance.HitInfo.transform.up);
-                }
-                else
-                {
-                    rotate = Quaternion.LookRotation(-Camera.main.transform.forward, Camera.main.transform.up);
-                    rotate.x = CursorManager.Instance.gameObject.transform.rotation.x;
-                    rotate.z = CursorManager.Instance.gameObject.transform.rotation.z;
-                }
 
-                block.transform.rotation = rotate;
+                if (GazeManager.Instance.Hit && GazeManager.Instance.HitInfo.collider != null)
+                {
+                    if (GazeManager.Instance.HitInfo.collider.name.StartsWith("LogicBlock"))
+                    {
+                        rotate = Quaternion.LookRotation(GazeManager.Instance.HitInfo.transform.forward, GazeManager.Instance.HitInfo.transform.up);
+                    }
+                    else
+                    {
+                        rotate = Quaternion.LookRotation(-Camera.main.transform.forward, Camera.main.transform.up);
+                        rotate.x = CursorManager.Instance.gameObject.transform.rotation.x;
+                        rotate.z = CursorManager.Instance.gameObject.transform.rotation.z;
+                    }
+
+                    block.transform.rotation = rotate;
+                }
+                
             }
             else
              {
