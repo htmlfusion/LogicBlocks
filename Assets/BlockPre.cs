@@ -25,7 +25,7 @@ namespace HoloToolkit.Unity
         // Update is called once per frame
         void Update()
         {
-            if (HandsManager.Instance.HandDetected)
+            if (HandsManager.Instance.HandDetected && !TutorialManager.Instance.menuOn)
             {
                 Quaternion rotate;
                 block.SetActive(true);

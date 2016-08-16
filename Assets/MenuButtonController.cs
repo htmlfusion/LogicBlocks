@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MenuButtonController : MonoBehaviour {
-    private Quaternion rotate;
+    private Vector3 rotate;
     private Vector3 updatePosition;
 	// Use this for initialization
 	void Start () {
@@ -11,10 +11,11 @@ public class MenuButtonController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        rotate = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
-        this.transform.rotation = rotate;
-        updatePosition = GameObject.Find("tutorial_animation").transform.position;
-        updatePosition.y = updatePosition.y + 0.5f;
+        rotate = Camera.main.transform.position;
+        this.transform.LookAt(rotate);
+        this.transform.RotateAround(this.transform.position, this.transform.up, 180f);
+        updatePosition = GameObject.Find("tutori al_animation").transform.position;
+        updatePosition.y = updatePosition.y + 1.1f;
         this.transform.position = updatePosition;
         
     }

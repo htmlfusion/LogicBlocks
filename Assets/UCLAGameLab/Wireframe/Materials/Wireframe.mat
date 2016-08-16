@@ -30,8 +30,8 @@ Material:
     m_Floats:
     - first:
         name: _Thickness
-      second: 1
+      second: 100
     m_Colors:
     - first:
         name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}
+      second: {r: 0.8014706, g: 0.1885813, b: 0.6323976, a: 1}
